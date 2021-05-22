@@ -1,0 +1,1042 @@
+\documentclass[11pt]{article}
+
+    \author{ПИН-21 Чендемеров Алексей}
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    \usepackage[utf8]{inputenc}
+    \usepackage[russian,english]{babel}
+    \selectlanguage{russian}
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \usepackage{mathpazo}
+    \else
+        \usepackage{fontspec}
+    \fi
+    \setmainfont{Linux Libertine}
+    \newfontfamily\russianfont[Script=Cyrillic]{Linux Libertine}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Численные методы. Лабораторная работа №1.}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{ux437ux430ux434ux430ux43dux438ux435-1}{%
+\subsection{Задание 1}\label{ux437ux430ux434ux430ux43dux438ux435-1}}
+
+    Зададим коэффициенты для полинома \[
+{(x-1)(x-2)....(x-20)} = {0}
+\]
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{coefs} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{21}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{coefs}\PY{p}{)}
+\PY{n}{p} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{poly}\PY{p}{(}\PY{n}{coefs}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{p}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[ 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20]
+[ 1.00000000e+00 -2.10000000e+02  2.06150000e+04 -1.25685000e+06
+  5.33279460e+07 -1.67228082e+09  4.01717716e+10 -7.56111184e+11
+  1.13102770e+13 -1.35585183e+14  1.30753501e+15 -1.01422999e+16
+  6.30308121e+16 -3.11333643e+17  1.20664780e+18 -3.59997952e+18
+  8.03781182e+18 -1.28709312e+19  1.38037598e+19 -8.75294804e+18
+  2.43290201e+18]
+    \end{Verbatim}
+
+    Найдём корни (корни действительные)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{roots}\PY{p}{(}\PY{n}{p}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([20.00003842, 18.99944526, 18.00332672, 16.98821521, 16.02622951,
+       14.95636365, 14.05068644, 12.9559752 , 12.0299548 , 10.98552896,
+       10.00542601,  8.9985865 ,  8.0002459 ,  6.9999773 ,  5.99999991,
+        5.00000023,  3.99999998,  3.        ,  2.        ,  1.        ])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Изменим один из коэффициентов на \(10^{-7}\) и заново найдём корни
+(стали комплексными).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{p}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mf}{1e\PYZhy{}7}
+\PY{n}{np}\PY{o}{.}\PY{n}{roots}\PY{p}{(}\PY{n}{p}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+array([20.42191428+0.99919021j, 20.42191428-0.99919021j,
+       18.15709998+2.47016309j, 18.15709998-2.47016309j,
+       15.31451742+2.69846576j, 15.31451742-2.69846576j,
+       12.84588825+2.06157319j, 12.84588825-2.06157319j,
+       10.92152839+1.10102893j, 10.92152839-1.10102893j,
+        9.57172741+0.j        ,  9.11219077+0.j        ,
+        7.99387715+0.j        ,  7.00032223+0.j        ,
+        5.99998503+0.j        ,  5.00000068+0.j        ,
+        3.99999999+0.j        ,  3.        +0.j        ,
+        2.        +0.j        ,  1.        +0.j        ])
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Попробуем закастовать \(2^{1023}\) в \texttt{float} и потом вывести его
+в научном формате (получилось).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}:e\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{1023}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+8.988466e+307
+    \end{Verbatim}
+
+    Теперь попробуем закастовать \(2^{1024}\) (не получилось, т.к. размер
+порядка ограничен 1024)
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}:e\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{1024}\PY{p}{)}\PY{p}{)} 
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red}{---------------------------------------------------------------------------}
+\textcolor{ansi-red}{OverflowError}                             Traceback (most recent call last)
+\textcolor{ansi-green}{<ipython-input-6-f24da7173b90>} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green}{----> 1}\textcolor{ansi-red}{ }print\textcolor{ansi-blue}{(}\textcolor{ansi-blue}{'\{:e\}'}\textcolor{ansi-blue}{.}format\textcolor{ansi-blue}{(}\textcolor{ansi-cyan}{2}\textcolor{ansi-blue}{**}\textcolor{ansi-cyan}{1024}\textcolor{ansi-blue}{)}\textcolor{ansi-blue}{)}
+
+\textcolor{ansi-red}{OverflowError}: int too large to convert to float
+    \end{Verbatim}
+
+    Максимальное целое число
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{finfo}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{d}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{max}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1.7976931348623157e+308
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Минимальное целое число
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{finfo}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{d}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{min}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+-1.7976931348623157e+308
+\end{Verbatim}
+\end{tcolorbox}
+        
+    16 cимволов после запятой
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+1.4142135623730951
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Ошибки не происходит, скорее всего, из-за того, что Python поддерживает
+длинную арифметику или из-за реализации функций в numpy
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{float\PYZus{}power}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{float\PYZus{}power}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{7}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+100000000.0000001
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{np}\PY{o}{.}\PY{n}{float\PYZus{}power}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{)} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{float\PYZus{}power}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{8}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+100000000.00000001
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Считал для \(10^{11}\) и \(10^{10}\) и ошибки не происходило (скорее
+всего из-за длинной арифметики или внутреннего представления
+\texttt{float} в Python) {[} Хотя CPython явно представляет float как 64
+битное число.{]}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{summ} \PY{o}{=} \PY{l+m+mi}{1}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{l+m+mf}{1e11}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{summ} \PY{o}{+}\PY{o}{=} \PY{l+m+mf}{1e\PYZhy{}10}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{summ}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red}{---------------------------------------------------------------------------}
+\textcolor{ansi-red}{KeyboardInterrupt}                         Traceback (most recent call last)
+\textcolor{ansi-green}{<ipython-input-12-712195d6f226>} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green-intense}{\textbf{      1}} summ \textcolor{ansi-blue}{=} \textcolor{ansi-cyan}{1}
+\textcolor{ansi-green-intense}{\textbf{      2}} \textcolor{ansi-green}{for} i \textcolor{ansi-green}{in} range\textcolor{ansi-blue}{(}int\textcolor{ansi-blue}{(}\textcolor{ansi-cyan}{1e11}\textcolor{ansi-blue}{)}\textcolor{ansi-blue}{)}\textcolor{ansi-blue}{:}
+\textcolor{ansi-green}{----> 3}\textcolor{ansi-red}{     }summ \textcolor{ansi-blue}{+=} \textcolor{ansi-cyan}{1e-10}
+\textcolor{ansi-green-intense}{\textbf{      4}} print\textcolor{ansi-blue}{(}summ\textcolor{ansi-blue}{)}
+
+\textcolor{ansi-red}{KeyboardInterrupt}: 
+    \end{Verbatim}
+
+    При \(n = 53\) происходит ошибка
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{eps}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{result}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{60}\PY{p}{)}\PY{p}{:}
+    \PY{n}{eps} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{*}\PY{o}{*} \PY{o}{\PYZhy{}}\PY{n}{i}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}5}\PY{l+s+si}{\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}}\PY{n}{eps}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}25}\PY{l+s+si}{\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+}\PY{n}{eps}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{/}\PY{n}{eps}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}25}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+n               eps                                             result
+0               1                                               1.0
+1               0.5                                             1.0
+2               0.25                                            1.0
+3               0.125                                           1.0
+4               0.0625                                          1.0
+5               0.03125                                         1.0
+6               0.015625                                        1.0
+7               0.0078125                                       1.0
+8               0.00390625                                      1.0
+9               0.001953125                                     1.0
+10              0.0009765625                                    1.0
+11              0.00048828125                                   1.0
+12              0.000244140625                                  1.0
+13              0.0001220703125                                 1.0
+14              6.103515625e-05                                 1.0
+15              3.0517578125e-05                                1.0
+16              1.52587890625e-05                               1.0
+17              7.62939453125e-06                               1.0
+18              3.814697265625e-06                              1.0
+19              1.9073486328125e-06                             1.0
+20              9.5367431640625e-07                             1.0
+21              4.76837158203125e-07                            1.0
+22              2.384185791015625e-07                           1.0
+23              1.1920928955078125e-07                          1.0
+24              5.960464477539063e-08                           1.0
+25              2.9802322387695312e-08                          1.0
+26              1.4901161193847656e-08                          1.0
+27              7.450580596923828e-09                           1.0
+28              3.725290298461914e-09                           1.0
+29              1.862645149230957e-09                           1.0
+30              9.313225746154785e-10                           1.0
+31              4.656612873077393e-10                           1.0
+32              2.3283064365386963e-10                          1.0
+33              1.1641532182693481e-10                          1.0
+34              5.820766091346741e-11                           1.0
+35              2.9103830456733704e-11                          1.0
+36              1.4551915228366852e-11                          1.0
+37              7.275957614183426e-12                           1.0
+38              3.637978807091713e-12                           1.0
+39              1.8189894035458565e-12                          1.0
+40              9.094947017729282e-13                           1.0
+41              4.547473508864641e-13                           1.0
+42              2.2737367544323206e-13                          1.0
+43              1.1368683772161603e-13                          1.0
+44              5.684341886080802e-14                           1.0
+45              2.842170943040401e-14                           1.0
+46              1.4210854715202004e-14                          1.0
+47              7.105427357601002e-15                           1.0
+48              3.552713678800501e-15                           1.0
+49              1.7763568394002505e-15                          1.0
+50              8.881784197001252e-16                           1.0
+51              4.440892098500626e-16                           1.0
+52              2.220446049250313e-16                           1.0
+53              1.1102230246251565e-16                          0.0
+54              5.551115123125783e-17                           0.0
+55              2.7755575615628914e-17                          0.0
+56              1.3877787807814457e-17                          0.0
+57              6.938893903907228e-18                           0.0
+58              3.469446951953614e-18                           0.0
+59              1.734723475976807e-18                           0.0
+    \end{Verbatim}
+
+    Из-за переполнения ответ становится неправильным -- обычная практика в
+олимпиадном программировании, например.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{I} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{/} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{I}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{l+m+mi}{1}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}5}\PY{l+s+si}{\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}}\PY{n}{I}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}25}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{n} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{31}\PY{p}{)}\PY{p}{:}
+    \PY{n}{I} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{n}{n} \PY{o}{*} \PY{n}{I}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{n}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}5}\PY{l+s+si}{\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}}\PY{n}{I}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}25}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+    
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+n               I
+1               0.36787944117144233
+2               0.26424111765711533
+3               0.207276647028654
+4               0.17089341188538398
+5               0.14553294057308008
+6               0.1268023565615195
+7               0.11238350406936348
+8               0.10093196744509214
+9               0.09161229299417073
+10              0.0838770700582927
+11              0.07735222935878028
+12              0.07177324769463667
+13              0.06694777996972334
+14              0.06273108042387321
+15              0.059033793641901866
+16              0.05545930172957014
+17              0.05719187059730757
+18              -0.029453670751536265
+19              1.559619744279189
+20              -30.19239488558378
+21              635.0402925972594
+22              -13969.886437139707
+23              321308.38805421325
+24              -7711400.313301118
+25              192785008.83252797
+26              -5012410228.645727
+27              135335076174.43463
+28              -3789382132883.17
+29              109892081853612.92
+30              -3296762455608386.5
+    \end{Verbatim}
+
+    Находит правильно, если учитывать погрешностии округлять результат
+(например с \(\epsilon\) = \(10^{-16}\))
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{mysin}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{n}{u} \PY{o}{=} \PY{n}{x}
+    \PY{n}{i} \PY{o}{=} \PY{l+m+mi}{1}
+    \PY{n}{flag} \PY{o}{=} \PY{k+kc}{False}
+    \PY{n}{summ} \PY{o}{=} \PY{n}{u}
+    \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+        \PY{n}{u} \PY{o}{=} \PY{n}{u} \PY{o}{*} \PY{p}{(}\PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{x} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        \PY{n}{summ} \PY{o}{+}\PY{o}{=} \PY{n}{u}
+        \PY{k}{if} \PY{n}{flag}\PY{p}{:}
+            \PY{k}{break}
+        \PY{k}{if} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{u}\PY{p}{)} \PY{o}{\PYZlt{}} \PY{l+m+mf}{1e\PYZhy{}17}\PY{p}{:}
+            \PY{n}{flag} \PY{o}{=} \PY{k+kc}{True}
+    \PY{k}{return} \PY{n}{summ}
+
+\PY{n}{points} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{pi} \PY{o}{/} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{pi} \PY{o}{/} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{]}
+\PY{n}{sins} \PY{o}{=} \PY{p}{[}\PY{n}{mysin}\PY{p}{(}\PY{n}{x}\PY{p}{)} \PY{k}{for} \PY{n}{x} \PY{o+ow}{in} \PY{n}{points}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{points}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{sins}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+[0, 1.0471975511965976, 1.5707963267948966, 3.141592653589793,
+6.283185307179586]
+[0.0, 0.8660254037844385, 1.0000000000000002, 2.4790609271195177e-16,
+4.3878932039122245e-16]
+    \end{Verbatim}
+
+    Опять происходит переполнение для больших входных \(x\), поэтому в
+реальности все подобные алгоритмы приводят входные данные к какому-то
+ограниченному диапазону (очевидно, что для тригонометрических функций
+достаточно отрезка от \(\frac{-\pi}{2}\) до \(\frac{\pi}{2}\)или от
+\(0\) до \(\pi\))
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def} \PY{n+nf}{mysin\PYZus{}print}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+    \PY{n}{u} \PY{o}{=} \PY{n}{x}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{u}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{l+m+mi}{0}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}5}\PY{l+s+si}{\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}}\PY{n}{u}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}25}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{i} \PY{o}{=} \PY{l+m+mi}{1}
+    \PY{n}{flag} \PY{o}{=} \PY{k+kc}{False}
+    \PY{n}{summ} \PY{o}{=} \PY{n}{u}
+    \PY{k}{while} \PY{k+kc}{True}\PY{p}{:}
+        \PY{n}{u} \PY{o}{=} \PY{n}{u} \PY{o}{*} \PY{p}{(}\PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{x} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}5}\PY{l+s+si}{\PYZcb{}}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+si}{\PYZob{}}\PY{n}{u}\PY{l+s+si}{:}\PY{l+s+s1}{\PYZlt{}25}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+        \PY{n}{summ} \PY{o}{+}\PY{o}{=} \PY{n}{u}
+        \PY{k}{if} \PY{n}{flag}\PY{p}{:}
+            \PY{k}{break}
+        \PY{k}{if} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{u}\PY{p}{)} \PY{o}{\PYZlt{}} \PY{l+m+mf}{1e\PYZhy{}17}\PY{p}{:}
+            \PY{n}{flag} \PY{o}{=} \PY{k+kc}{True}
+    \PY{k}{return} \PY{n}{summ}
+
+\PY{n}{x} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+\PY{n}{x}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mysin\PYZus{}print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{*}\PY{l+m+mi}{12}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n}{x}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mysin\PYZus{}print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{*}\PY{l+m+mi}{13}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n}{x}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mysin\PYZus{}print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{*}\PY{l+m+mi}{14}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+n               u
+0               37.69911184307752
+1               -8929.807683926347
+2               634562.4183707595
+3               -21472731.555832986
+4               423854731.73371917
+5               -5476291888.243632
+6               49891231866.331665
+7               -337650323385.4057
+8               1764251532907.3298
+9               -7331564081604.561
+10              24809018443430.754
+11              -69682111574511.336
+12              165056370017519.22
+13              -334162271990305.9
+14              584875761040825.1
+15              -893805272556234.8
+16              1202932425236984.8
+17              -1436668294789759.5
+18              1532902456774330.0
+19              -1470037975755849.5
+20              1273934043683861.5
+21              -1002516282597193.5
+22              719595571991636.6
+23              -473036911148918.7
+24              285837990621617.4
+25              -159309622036949.84
+26              82153303460817.77
+27              -39312514201256.56
+28              17503712624598.932
+29              -7269631665207.737
+30              2822887423366.538
+31              -1027125608753.4813
+32              350907349452.402
+33              -112781005824.58708
+34              34161756873.01164
+35              -9768908599.904654
+36              2641514063.327634
+37              -676428942.4853929
+38              164278262.77512643
+39              -37889654.49554902
+40              8310131.128111686
+41              -1735314.3950649824
+42              345415.79678938625
+43              -65612.52160125064
+44              11906.285368049981
+45              -2066.1156302264953
+46              343.1990561106805
+47              -54.62064991132304
+48              8.336353712708581
+49              -1.2211727390276248
+50              0.17183750741604203
+51              -0.023245709461550114
+52              0.003025397227360346
+53              -0.0003791010602881931
+54              4.576853202541888e-05
+55              -5.327378536917623e-06
+56              5.982453449912522e-07
+57              -6.485431457966371e-08
+58              6.791367942759498e-09
+59              -6.873699295661437e-10
+60              6.728002593741318e-11
+61              -6.3721126598701246e-12
+62              5.842705345742685e-13
+63              -5.1892184832045295e-14
+64              4.466470951748517e-15
+65              -3.727452375943013e-16
+66              3.01751035197196e-17
+67              -2.370677289564589e-18
+68              1.808319648740604e-19
+
+n               u
+0               40.840704496667314
+1               -11353.464977769787
+2               946858.0568581794
+3               -37602960.50558273
+4               871116003.0622387
+5               -13208994427.893934
+6               141231512001.13235
+7               -1121756936946.623
+8               6878857452614.389
+9               -33548773983349.1
+10              133233615531831.55
+11              -439187273162442.8
+12              1220913641423325.2
+13              -2900910193215591.0
+14              5958880893733033.0
+15              -1.068730506338276e+16
+16              1.6880711128882252e+16
+17              -2.3660843700707324e+16
+18              2.9628690122834868e+16
+19              -3.334653382151728e+16
+20              3.39151154800249e+16
+21              -3.132290290025647e+16
+22              2.638658969391714e+16
+23              -2.0357011609439044e+16
+24              1.4436541276415564e+16
+25              -9442987754031000.0
+26              5715005638943512.0
+27              -3209568610193969.0
+28              1677143530466761.5
+29              -817479133738897.4
+30              372547832210119.0
+31              -159087571280886.38
+32              63786587867943.414
+33              -24060080875503.332
+34              8553138989088.722
+35              -2870487041743.0176
+36              910933521753.6548
+37              -273766403733.79266
+38              78030121571.13542
+39              -21121610984.363304
+40              5436738990.627072
+41              -1332394983.6526499
+42              311258504.99936146
+43              -69388895.28578915
+44              14777594.474539159
+45              -3009582.7762294146
+46              586707.941668782
+47              -109586.4751253036
+48              19629.102401870667
+49              -3374.6257835378537
+50              557.302121881652
+51              -88.47890721980497
+52              13.514611377740636
+53              -1.9874690249194729
+54              0.28160253847929045
+55              -0.038468685944267056
+56              0.005069875975414267
+57              -0.000645031752139395
+58              7.927270771728507e-05
+59              -9.416319240877441e-06
+60              1.0816854988904039e-06
+61              -1.20232676617014e-07
+62              1.2938301501657544e-08
+63              -1.3486195505518861e-09
+64              1.3623108680397445e-10
+65              -1.3342832168331302e-11
+66              1.26767784748653e-12
+67              -1.16884462564903e-13
+68              1.0463663355478251e-14
+69              -9.098636652018564e-16
+70              7.688039814716382e-17
+71              -6.3150630645581e-18
+72              5.044680288484288e-19
+
+n               u
+0               43.982297150257104
+1               -14180.203868457116
+2               1371539.4245829931
+3               -63170573.85861541
+4               1697220006.385679
+5               -29847040443.17852
+6               370111425747.61163
+7               -3409329799355.2793
+8               24246883576935.53
+9               -137146787068041.94
+10              631672782179605.5
+11              -2414890617243964.5
+12              7785778254272807.0
+13              -2.1454615469456176e+16
+14              5.111172313197143e+16
+15              -1.063147178105709e+17
+16              1.9475350808100528e+17
+17              -3.165877779620511e+17
+18              4.597754060317196e+17
+19              -6.00141071992664e+17
+20              7.078892519640264e+17
+21              -7.582342346771482e+17
+22              7.407881313973412e+17
+23              -6.628177692761962e+17
+24              5.4514576439738144e+17
+25              -4.135502411624303e+17
+26              2.902718239944355e+17
+27              -1.8906200068522304e+17
+28              1.1457693051132858e+17
+29              -6.476986546377322e+16
+30              3.4233218046690564e+16
+31              -1.6953965852899512e+16
+32              7883767176814510.0
+33              -3448822702892051.5
+34              1421898781436465.5
+35              -553436897454549.5
+36              203689466288653.28
+37              -70995595094748.62
+38              23468368730313.99
+39              -7367447095129.922
+40              2199367670042.8867
+41              -625117574468.1617
+42              169363302545.8232
+43              -43788233634.46938
+44              10815349655.944696
+45              -2554538659.6424766
+46              577560548.8078797
+47              -125112838.78435919
+48              25990505.58017433
+49              -5182141.581022749
+50              992530.1704559936
+51              -182751.99953884477
+52              32373.921981269843
+53              -5521.556106674785
+54              907.3337234501068
+55              -143.74978561860064
+56              21.97184649906847
+57              -3.242049797850811
+58              0.4620954019208789
+59              -0.06365880695443715
+60              0.008481012347932486
+61              -0.0010932980415693815
+62              0.0001364465907034843
+63              -1.6494693096842047e-05
+64              1.9324148942774502e-06
+65              -2.1950354826054636e-07
+66              2.418643110330005e-08
+67              -2.5863603839303394e-09
+68              2.685254052327308e-10
+69              -2.7079915867620456e-11
+70              2.6537253869466307e-12
+71              -2.5280602150226737e-13
+72              2.3421393812182525e-14
+73              -2.111049236971358e-15
+74              1.851851661828974e-16
+75              -1.5815896199131873e-17
+76              1.315571946675627e-18
+77              -1.0661492401644133e-19
+
+[-0.26048840103934273, -2.9021751309903294, -83.11717551225941]
+    \end{Verbatim}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
